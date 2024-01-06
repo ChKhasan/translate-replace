@@ -15,7 +15,7 @@ module.exports = function () {
   const templates = require("./helpersTranslation/fileTemplates");
   const getTranslations = require("./helpersTranslation/translationsFile");
   const OUTSIDE_FILES = require("./helpersTranslation/outsideFiles");
-
+  const replaceContent = require("./helpersTranslation/replaceContent");
   const fileType = selectedValues[1] || "html";
   const folderName =
     selectedValues[0] == OUTSIDE_FILES ? undefined : selectedValues[0];
@@ -23,7 +23,7 @@ module.exports = function () {
 
   async function searchAndReplaceInFolder(folderName) {
     const scriptDirectory = __dirname;
-    const grandparentDirectory = path.dirname(path.dirname(scriptDirectory))
+    const grandparentDirectory = path.dirname(path.dirname(scriptDirectory));
 
     const targetDirectory = folderName
       ? path.join(grandparentDirectory, folderName)
@@ -64,7 +64,7 @@ module.exports = function () {
         );
       });
       simpleTexts.forEach((item, index) => {
-        let replaceText = `{{$store.state.translations['${item[0]}']}}`;
+        let replaceText = replaceContent[0] + item[0] + replaceContent[1];
         searchAndReplaceFiles(
           targetDirectory,
           item[1],
@@ -75,7 +75,7 @@ module.exports = function () {
       });
     }
   }
-  function searchAndReplaceFiles(
+  async function searchAndReplaceFiles(
     directory,
     searchText,
     replaceText,
@@ -83,6 +83,8 @@ module.exports = function () {
     isPlace
   ) {
     try {
+      const texts = await getTranslations();
+
       const files = fs.readdirSync(directory);
       files.forEach(async (file) => {
         const filePath = path.join(directory, file);
@@ -95,24 +97,30 @@ module.exports = function () {
           );
           searchAndReplaceFiles(filePath, searchText, replaceText, 2);
         } else if (stats.isFile() && file.endsWith(`.${fileType}`)) {
-          consoleUtils.info(
-            `${
-              isPlace ? "[Placeholder]: " : ""
-            }Searching for text ${textIndex} in file named ${file}...`
-          );
-          let content = fs.readFileSync(filePath, "utf-8");
-          const updatedContent = replaceTextInVueTemplate(
-            content,
-            searchText,
-            replaceText
-          );
-          if (updatedContent !== content) {
-            consoleUtils.success(
-              `Replaced text ${textIndex} in file: ${filePath}`
+          if (!Object.keys(texts).includes(searchText)) {
+            consoleUtils.info(
+              `${
+                isPlace ? "[Placeholder]: " : ""
+              }Searching for text ${textIndex} in file named ${file}...`
+            );
+            let content = fs.readFileSync(filePath, "utf-8");
+            const updatedContent = replaceTextInVueTemplate(
+              content,
+              searchText,
+              replaceText
+            );
+            if (updatedContent !== content) {
+              consoleUtils.success(
+                `Replaced text ${textIndex} in file: ${filePath}`
+              );
+            }
+
+            fs.writeFileSync(filePath, updatedContent, "utf-8");
+          } else {
+            consoleUtils.error(
+              `"${searchText}" text can be equal to one of the keywords please check!!`
             );
           }
-
-          fs.writeFileSync(filePath, updatedContent, "utf-8");
         }
       });
     } catch (e) {

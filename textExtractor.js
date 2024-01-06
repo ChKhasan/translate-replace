@@ -1,8 +1,9 @@
 const fs = require("fs").promises;
 const path = require("path");
 const consoleUtils = require("./helpersTranslation/consoleUnits");
+const templates = require("./helpersTranslation/fileTemplates");
 
-async function extractTextContent(filePaths) {
+async function extractTextContent(filePaths, fileType) {
   try {
     const jsonFilePath = path.resolve(__dirname, "../../translateFile.json");
 
@@ -19,15 +20,13 @@ async function extractTextContent(filePaths) {
 
     for (const filePath of filePaths) {
       const fileContent = await fs.readFile(filePath, "utf8");
-      const templateMatch = fileContent.match(
-        /<template lang="html">([\s\S]*?)<\/template>/
-      );
+      const templateMatch = fileContent.match(templates[fileType]);
 
       const templateContent = templateMatch ? templateMatch[1].trim() : "";
       const textContent = templateContent
         .replace(/<[^>]+>|{{[^}]+}}/g, "")
         .trim();
-  
+
       const textArray = textContent.split(/\r?\n/);
       const trimmedTextArray = textArray.map((line) =>
         line.replace(/^\s+/, "")
@@ -39,7 +38,10 @@ async function extractTextContent(filePaths) {
       };
 
       // Update existingData with new content
-      const fileName = result.fileName.split("\\").at(-1).replace(".vue", "");
+      const fileName = result.fileName
+        .split("\\")
+        .at(-1)
+        .replace(`.${fileType}`, "");
       result.lines.forEach((elem, index) => {
         existingData[`${fileName}.${index}`] = elem;
       });

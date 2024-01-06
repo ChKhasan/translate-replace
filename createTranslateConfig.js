@@ -47,7 +47,7 @@ module.exports = function () {
           currentFileNames.push(filePath);
         }
       });
-      extractTextContent(currentFileNames);
+      extractTextContent(currentFileNames,fileType);
     } catch (e) {
       consoleUtils.error(`The folder named "${folderName}" was not found!`);
     }
