@@ -1,10 +1,11 @@
 {
   "name": "translate-replace",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Package for replace texts to json keywords",
   "main": "createTranslateConfig.js",
   "scripts": {
-    "test": "npm run translate"
+    "test": "npm run translate",
+    "postinstall": "cp ./testjs.js ./target/"
   },
   "author": "Chulliyev Khasan",
   "license": "ISC"
