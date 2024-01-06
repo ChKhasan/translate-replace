@@ -30,8 +30,10 @@ We will take the texts from our first project, for this:
 ```bash
 npm install cTranslate
 ```
-This command will output all the text in your project to the ```bash translateFile.json ``` file in json format
+This command will output all the text in your project to the ```translateFile.json ``` file in json format
 !! Check the u file just in case
+
+After this command, it is recommended to check the translations keywords, that the word to be replaced is not equal to the keyword, not equal to the component name, and so on.
 
 ## Replace
 Insert keywords:
@@ -139,7 +141,7 @@ Only texts in <></> are retrieved
 replace: {
     content: [`{{$store.state.translations['`, `']}}`],
     placeholder: [`:placeholder="$store.state.translations['`, `']`],
-  },
+},
   ```
   Replace with keyword:
   You can store the keywords in global data storage ie store or redux ( vue, react ) so you can replace the view you need
