@@ -95,7 +95,7 @@ replace: {
    ## This example is for vue store
    
 ```bash
-  export const state = () => ({
+export const state = () => ({
   translations: {
     your_json_key: 'your_text'
   },
@@ -103,19 +103,19 @@ replace: {
 ```
 You have to put
 ```bash
- {{$store.state.translations['your_json_key']}}
+{{$store.state.translations['your_json_key']}}
 ```
 Through these, you can get it as per your convenience
 ```bash
-  content: [`{{$store.state.translations['`, `']}}`],
-  placeholder: [`:placeholder="$store.state.translations['`, `']`],
+content: [`{{$store.state.translations['`, `']}}`],
+placeholder: [`:placeholder="$store.state.translations['`, `']`],
 ```
 
    ## Example
 Your file
 ```bash
 # myFile.vue
-   <template lang="html">
+<template lang="html">
   <div>
     <div>Your text</div>
   </div>
