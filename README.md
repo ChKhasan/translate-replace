@@ -74,6 +74,64 @@ module.exports = {
   ],
 };
 ```
+## Templates
+
+You choose or modify the templates depending on the environment you are using
+For example:
+```bash
+  fileTemplates: {
+    html: /<html lang="en">([\s\S]*?)<\/html>/,
+    vue: /<template lang="html">([\s\S]*?)<\/template>/,
+    jsx: /<>([\s\S]*?)<\/>/,
+  },
+```
+```bash
+/<html lang="en">([\s\S]*?)<\/html>/
+```
+For
+```bash
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+</html>
+```
+So
+```bash
+# /<html lang="en">([\s\S]*?)<\/html>/ == <html lang="en"></html>
+```
+Only texts in <html lang="en"></html> are retrieved
+
+
+```bash
+<template lang="html">
+  <div>
+    <div>Your text</div>
+  </div>
+</template>
+```
+```bash
+# /<template lang="html">([\s\S]*?)<\/template>/ == <template lang="html"></template>
+```
+Only texts in <template lang="html"></template> are retrieved
+
+and for React
+
+```bash
+ return (
+    <>
+      <div>Your text</div>
+    </>
+  );
+```
+```bash
+# /<>([\s\S]*?)<\/>/ == <></>
+```
+
+Only texts in <></> are retrieved
 
 ## Replace Content
 
