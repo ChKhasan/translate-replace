@@ -1,5 +1,7 @@
 # Translate replace
 
+For more detailed documentation, visit [Documentation Link](https://github.com/ChKhasan/translate-replace).
+
 A simple npm package for translation and replacement.
 This package is currently fully functional for vue, nuxt, react and ...
 
