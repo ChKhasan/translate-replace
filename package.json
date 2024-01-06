@@ -1,11 +1,17 @@
 {
   "name": "translate-replace",
-  "version": "1.0.3",
+  "version": "1.0.26",
   "description": "Package for replace texts to json keywords",
   "main": "createTranslateConfig.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ChKhasan/translate-replace"
+  },
+  "homepage": "https://github.com/ChKhasan/translate-replacee#readme",
   "scripts": {
     "test": "npm run translate",
-    "postinstall": "cp ./testjs.js ./target/"
+    "start": "node ./toTranslate.js",
+    "postinstall": "node ./config-installer.js"
   },
   "author": "Chulliyev Khasan",
   "license": "ISC"

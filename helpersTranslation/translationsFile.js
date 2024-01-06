@@ -3,7 +3,7 @@ const path = require("path");
 const fs = require("fs").promises;
 
 module.exports = async function () {
-  const jsonFilePath = path.resolve(__dirname, "../translateFile.json");
+  const jsonFilePath = path.resolve(__dirname, "../../../translateFile.json");
 
   // Check if the JSON file exists and is not empty
   let existingData = {};

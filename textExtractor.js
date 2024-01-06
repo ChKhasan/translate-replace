@@ -4,7 +4,7 @@ const consoleUtils = require("./helpersTranslation/consoleUnits");
 
 async function extractTextContent(filePaths) {
   try {
-    const jsonFilePath = path.resolve(__dirname, "translateFile.json");
+    const jsonFilePath = path.resolve(__dirname, "../../translateFile.json");
 
     // Check if the JSON file exists and is not empty
     let existingData = {};
