@@ -94,22 +94,22 @@ replace: {
    ```
    ## This example is for vue store
    
-  ```bash
+```bash
   export const state = () => ({
   translations: {
     your_json_key: 'your_text'
   },
-})```
-
-  ```bash
+})
+```
+You have to put
+```bash
  {{$store.state.translations['your_json_key']}}
-  ```
+```
 Through these, you can get it as per your convenience
-  ```bash
-   content: [`{{$store.state.translations['`, `']}}`],
+```bash
+  content: [`{{$store.state.translations['`, `']}}`],
   placeholder: [`:placeholder="$store.state.translations['`, `']`],
-
-  ```
+```
 
    ## Example
 Your file
