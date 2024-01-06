@@ -1,7 +1,7 @@
 # Translate replace
 
 A simple npm package for translation and replacement.
-This package is currently fully functional for vue and nuxt
+This package is currently fully functional for vue, nuxt, react and ...
 
 ## Installation
 
