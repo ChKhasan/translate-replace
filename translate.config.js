@@ -5,7 +5,10 @@ module.exports = {
     vue: /<template lang="html">([\s\S]*?)<\/template>/,
     jsx: /<>([\s\S]*?)<\/>/,
   },
-  replaceContent: [`{{$store.state.translations['`, `']}}`],
+  replace: {
+    content: [`{{$store.state.translations['`, `']}}`],
+    placeholder: [`:placeholder="$store.state.translations['`, `']}}`],
+  },
   ignorFiles: [
     ".idea",
     ".nuxt",

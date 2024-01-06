@@ -1,6 +1,6 @@
 {
   "name": "translate-replace",
-  "version": "1.0.33",
+  "version": "1.0.35",
   "description": "A versatile npm package for translating and replacing text seamlessly. Support for multiple languages and easy integration into your projects.",
   "keywords": ["translate", "replace", "text", "language","translate-replace"],
   "main": "createTranslateConfig.js",

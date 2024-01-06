@@ -15,7 +15,7 @@ module.exports = function () {
   const templates = require("./helpersTranslation/fileTemplates");
   const getTranslations = require("./helpersTranslation/translationsFile");
   const OUTSIDE_FILES = require("./helpersTranslation/outsideFiles");
-  const replaceContent = require("./helpersTranslation/replaceContent");
+  const replaceContent = require("./helpersTranslation/replace");
   const fileType = selectedValues[1] || "html";
   const folderName =
     selectedValues[0] == OUTSIDE_FILES ? undefined : selectedValues[0];
@@ -54,7 +54,10 @@ module.exports = function () {
 
       placeHolderTexts.forEach((item, index) => {
         let searchText = `placeholder="${item[1]}"`;
-        let replaceText = `:placeholder="$store.state.translations['${item[0]}']"`;
+        let replaceText =
+          replaceContent.placeholder[0] +
+          item[0] +
+          replaceContent.placeholder[1];
         searchAndReplaceFiles(
           targetDirectory,
           searchText,
@@ -64,7 +67,8 @@ module.exports = function () {
         );
       });
       simpleTexts.forEach((item, index) => {
-        let replaceText = replaceContent[0] + item[0] + replaceContent[1];
+        let replaceText =
+          replaceContent.content[0] + item[0] + replaceContent.content[1];
         searchAndReplaceFiles(
           targetDirectory,
           item[1],
@@ -84,7 +88,6 @@ module.exports = function () {
   ) {
     try {
       const texts = await getTranslations();
-
       const files = fs.readdirSync(directory);
       files.forEach(async (file) => {
         const filePath = path.join(directory, file);
@@ -118,7 +121,7 @@ module.exports = function () {
             fs.writeFileSync(filePath, updatedContent, "utf-8");
           } else {
             consoleUtils.error(
-              `"${searchText}" text can be equal to one of the keywords please check!!`
+              `"${searchText}" text can be equal to one of the keywords please check !!!`
             );
           }
         }
