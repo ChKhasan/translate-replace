@@ -1,4 +1,4 @@
-# translate-replace
+# Translate replace
 
 A simple npm package for translation and replacement.
 This package is currently fully functional for vue and nuxt
