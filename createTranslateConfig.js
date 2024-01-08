@@ -16,14 +16,15 @@ module.exports = function () {
   const selectedValues = require("./toCreateTranslate");
   const consoleUtils = require("./helpersTranslation/consoleUnits");
   const OUTSIDE_FILES = require("./helpersTranslation/outsideFiles");
+  const ignorFiles = require("./helpersTranslation/ignoreFiles");
 
   const fileType = selectedValues[1] || "html";
   const folderName =
     selectedValues[0] == OUTSIDE_FILES ? undefined : selectedValues[0];
   async function searchAndReplaceInFolder(folderName) {
     const scriptDirectory = __dirname;
-    const grandparentDirectory = path.dirname(path.dirname(scriptDirectory))
-    console.log("folders",grandparentDirectory);
+    const grandparentDirectory = path.dirname(path.dirname(scriptDirectory));
+    console.log("folders", grandparentDirectory);
     const targetDirectory = folderName
       ? path.join(grandparentDirectory, folderName)
       : grandparentDirectory;
@@ -40,14 +41,13 @@ module.exports = function () {
       files.forEach((file) => {
         const filePath = path.join(directory, file);
         const stats = fs.statSync(filePath);
-        if (stats.isDirectory() && folderName) {
-          console.log("flder", filePath);
+        if (stats.isDirectory() && folderName && !ignorFiles.includes(file)) {
           searchAndReplaceFiles(filePath);
         } else if (stats.isFile() && file.endsWith(`.${fileType}`)) {
           currentFileNames.push(filePath);
         }
       });
-      extractTextContent(currentFileNames,fileType);
+      extractTextContent(currentFileNames, fileType);
     } catch (e) {
       consoleUtils.error(`The folder named "${folderName}" was not found!`);
     }

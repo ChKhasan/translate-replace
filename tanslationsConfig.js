@@ -16,6 +16,8 @@ module.exports = function () {
   const getTranslations = require("./helpersTranslation/translationsFile");
   const OUTSIDE_FILES = require("./helpersTranslation/outsideFiles");
   const replaceContent = require("./helpersTranslation/replace");
+  const ignorFiles = require("./helpersTranslation/ignoreFiles");
+
   const fileType = selectedValues[1] || "html";
   const folderName =
     selectedValues[0] == OUTSIDE_FILES ? undefined : selectedValues[0];
@@ -92,7 +94,7 @@ module.exports = function () {
       files.forEach(async (file) => {
         const filePath = path.join(directory, file);
         const stats = fs.statSync(filePath);
-        if (stats.isDirectory() && folderName) {
+        if (stats.isDirectory() && folderName && !ignorFiles.includes(file)) {
           consoleUtils.info(
             `${
               isPlace ? "[Placeholder]: " : ""
