@@ -43,7 +43,9 @@ async function extractTextContent(filePaths, fileType) {
         .at(-1)
         .replace(`.${fileType}`, "");
       result.lines.forEach((elem, index) => {
-        const textCode = elem.map((textItem) => [...textItem][0]);
+        const textCode = elem
+          .split(" ")
+          .map((textItem) => textItem[0].toLowerCase() + textItem.length);
         existingData[
           `${fileName}${elem.length}.${index}${textCode.join("")}`
         ] = elem;
