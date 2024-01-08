@@ -33,13 +33,13 @@ async function extractTextContent(filePaths, fileType) {
       );
       const relativePath = path.relative(__dirname, filePath);
       const result = {
-        fileName: relativePath.replace(/\//g, "."), // Replace slashes with dots
+        fileName: relativePath,
         lines: trimmedTextArray.filter((elem) => elem != ""),
       };
 
       // Update existingData with new content
       const fileName = result.fileName
-        .split("\\")
+        .split(result.fileName.includes("/") ? "/" : "\\")
         .at(-1)
         .replace(`.${fileType}`, "");
       result.lines.forEach((elem, index) => {
