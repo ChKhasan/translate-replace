@@ -5,11 +5,5 @@ const DEFAULT = [
   "node_modules",
   ".git",
   "helpersTranslation",
-  // "static",
-  // "store",
-  // "plugins",
-  // "mixins",
-  // "api",
-  // "assets",
 ];
 module.exports = config.ignorFiles || DEFAULT;

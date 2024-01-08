@@ -1,6 +1,6 @@
 {
   "name": "translate-replace",
-  "version": "1.0.38",
+  "version": "1.0.40",
   "description": "A versatile npm package for translating and replacing text seamlessly. Support for multiple languages and easy integration into your projects.",
   "keywords": ["translate", "replace", "text", "language","translate-replace","translation","translation","vue","vuejs","nuxt","nuxtjs","react","reactjs"],
   "main": "createTranslateConfig.js",
