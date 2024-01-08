@@ -47,7 +47,7 @@ async function extractTextContent(filePaths, fileType) {
           .split(" ")
           .map((textItem) => textItem[0].toLowerCase() + textItem.length);
         existingData[
-          `${fileName}${elem.length}.${index}${textCode.join("")}`
+          `${fileName}.${index}${textCode.join("")}`
         ] = elem;
       });
     }
