@@ -30,7 +30,7 @@ We add start commands to Package.json:
 We will take the texts from our first project, for this:
 
 ```bash
-npm run cTranslate
+npm run  cTranslate
 ```
 This command will output all the text in your project to the ```translateFile.json ``` file in json format
 !! Check the u file just in case

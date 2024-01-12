@@ -138,15 +138,31 @@ module.exports = function () {
 
     if (matches) {
       const templateContent = matches[1];
-      const updatedTemplateContent = templateContent.replace(
-        new RegExp(searchText, "g"),
-        replaceText
-      );
-      const updatedContent = content.replace(
-        templateContent,
-        updatedTemplateContent
-      );
-      return updatedContent;
+
+      const searchTextTrim = searchText.trim().toString();
+      try {
+        const escapedSearchText = searchTextTrim.replace(
+          /[.*+?^${}()|[\]\\]/g,
+          "\\$&"
+        );
+        if (!replaceText.includes(searchTextTrim)) {
+          const updatedTemplateContent = templateContent.replace(
+            new RegExp(escapedSearchText, "g"),
+            replaceText
+          );
+          const updatedContent = content.replace(
+            templateContent,
+            updatedTemplateContent
+          );
+          return updatedContent;
+        } else {
+          consoleUtils.error(
+            `[${searchTextTrim}]: The search text may contain a replacement keyword, please check your keywords`
+          );
+        }
+      } catch (e) {
+        console.log(e);
+      }
     }
 
     return content;

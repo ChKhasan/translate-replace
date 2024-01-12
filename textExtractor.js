@@ -34,7 +34,9 @@ async function extractTextContent(filePaths, fileType) {
       const relativePath = path.relative(__dirname, filePath);
       const result = {
         fileName: relativePath,
-        lines: trimmedTextArray.filter((elem) => elem != ""),
+        lines: trimmedTextArray
+          .filter((elem) => elem != "")
+          .map((elem2) => elem2.trim()),
       };
 
       // Update existingData with new content
@@ -43,12 +45,7 @@ async function extractTextContent(filePaths, fileType) {
         .at(-1)
         .replace(`.${fileType}`, "");
       result.lines.forEach((elem, index) => {
-        const textCode = elem
-          .split(" ")
-          .map((textItem) => textItem[0].toLowerCase() + textItem.length);
-        existingData[
-          `${fileName}.${index}${textCode.join("")}`
-        ] = elem;
+        existingData[`${fileName}.${index}_key${index}`] = elem;
       });
     }
 
