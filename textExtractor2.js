@@ -1,6 +1,5 @@
 const fs = require("fs").promises;
 const path = require("path");
-const cheerio = require("cheerio");
 const consoleUtils = require("./helpersTranslation/consoleUnits");
 const templates = require("./helpersTranslation/fileTemplates");
 
@@ -18,23 +17,23 @@ async function extractTextContent(filePaths, fileType) {
 
     for (const filePath of filePaths) {
       const fileContent = await fs.readFile(filePath, "utf8");
-      const $ = cheerio.load(fileContent);
-
       const templateMatch = fileContent.match(templates[fileType]);
-      const templateContent = templateMatch ? templateMatch[1].trim() : "";
 
-      const textContent = $(templateContent)
-        .map(function() {
-          return $(this).text().trim();
-        })
-        .get()
-        .join(" ");
+      const templateContent = templateMatch ? templateMatch[1].trim() : "";
+      const textContent = templateContent
+        .replace(/<[^>]+>|{{[^}]+}}/g, "")
+        .trim();
 
       const textArray = textContent.split(/\r?\n/);
+      const trimmedTextArray = textArray.map((line) =>
+        line.replace(/^\s+/, "")
+      );
       const relativePath = path.relative(__dirname, filePath);
       const result = {
         fileName: relativePath,
-        lines: textArray.map((line) => line.trim()).filter((line) => line !== ""),
+        lines: trimmedTextArray
+          .filter((elem) => elem != "")
+          .map((elem2) => elem2.trim()),
       };
 
       // Update existingData with new content
@@ -58,7 +57,7 @@ async function extractTextContent(filePaths, fileType) {
       jsonFilePath
     );
 
-    return existingData;
+    return existingData; 
   } catch (error) {
     consoleUtils.error("Error reading/writing files:", error.message);
     return null;

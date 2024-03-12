@@ -37,6 +37,8 @@ This command will output all the text in your project to the ```translateFile.js
 
 After this command, it is recommended to check the translations keywords, that the word to be replaced is not equal to the keyword, not equal to the component name, and so on.
 
+> [!WARNING]
+> I remind you that getting texts from the project does not work for placeholder texts
 ## Replace
 Insert keywords:
 
