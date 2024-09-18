@@ -8,7 +8,7 @@
 
 // const axios = require("axios");
 module.exports = function () {
-  const { extractTextContent } = require("./textExtractor2");
+  const { extractTextContent } = require("./textExtractor");
   let currentFileNames = [];
 
   const fs = require("fs");

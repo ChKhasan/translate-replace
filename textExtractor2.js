@@ -12,8 +12,7 @@ async function extractTextContent(filePaths, fileType) {
       if (existingJson.trim() !== "") {
         existingData = JSON.parse(existingJson);
       }
-    } catch (readError) {
-    }
+    } catch (readError) {}
 
     for (const filePath of filePaths) {
       const fileContent = await fs.readFile(filePath, "utf8");
@@ -57,7 +56,7 @@ async function extractTextContent(filePaths, fileType) {
       jsonFilePath
     );
 
-    return existingData; 
+    return existingData;
   } catch (error) {
     consoleUtils.error("Error reading/writing files:", error.message);
     return null;

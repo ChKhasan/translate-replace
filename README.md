@@ -23,7 +23,14 @@ We add start commands to Package.json:
     "translate": "node node_modules/translate-replace/toTranslate.js",
     "cTranslate": "node node_modules/translate-replace/toCreateTranslate.js"
   },
-  ```
+```
+## Change
+
+Change module type to Package.json:
+
+```bash
+   "type": "commonjs",
+```
 
 ## Start
 
@@ -236,4 +243,41 @@ module.exports = {
 export default {};
 </script>
 <style lang="css"></style>
+```
+## Here is a list of tags that Cheerio extracts text from:
+```bash
+p (параграф)
+h1 (заголовок первого уровня)
+h2 (заголовок второго уровня)
+h3 (заголовок третьего уровня)
+h4 (заголовок четвертого уровня)
+h5 (заголовок пятого уровня)
+h6 (заголовок шестого уровня)
+span
+div
+a (ссылка)
+li (пункт списка)
+strong (выделение текста)
+em (курсив)
+button (кнопка)
+textarea (текстовое поле)
+input (входное поле)
+select (выпадающий список)
+option (опция выпадающего списка)
+label
+table
+tr (строка таблицы)
+td (ячейка таблицы)
+th (заголовок ячейки таблицы)
+form
+header
+footer
+section
+article
+aside
+nav
+details
+summary
+figcaption
+figure
 ```

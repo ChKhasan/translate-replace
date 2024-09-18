@@ -14,36 +14,42 @@ async function extractTextContent(filePaths, fileType) {
         existingData = JSON.parse(existingJson);
       }
     } catch (readError) {
+      // Обработка ошибки чтения JSON файла
     }
-
+    
     for (const filePath of filePaths) {
+      console.log("filePath",filePath);
       const fileContent = await fs.readFile(filePath, "utf8");
       const $ = cheerio.load(fileContent);
 
       const templateMatch = fileContent.match(templates[fileType]);
       const templateContent = templateMatch ? templateMatch[1].trim() : "";
+  
+      // Извлекаем текст из каждого тега, включая <option> по отдельности
+      const textElements = [];
+      $(templateContent).find('*').each(function() {
+        if ($(this).text().trim()) {
+          textElements.push($(this).text().trim());
+        }
+      });
 
-      const textContent = $(templateContent)
-        .map(function() {
-          return $(this).text().trim();
-        })
-        .get()
-        .join(" ");
-
-      const textArray = textContent.split(/\r?\n/);
       const relativePath = path.relative(__dirname, filePath);
       const result = {
         fileName: relativePath,
-        lines: textArray.map((line) => line.trim()).filter((line) => line !== ""),
+        lines: textElements, // Текстовые элементы по отдельности
       };
 
-      // Update existingData with new content
+      // Обновляем existingData новыми данными
       const fileName = result.fileName
         .split(result.fileName.includes("/") ? "/" : "\\")
         .at(-1)
         .replace(`.${fileType}`, "");
+
       result.lines.forEach((elem, index) => {
-        existingData[`${fileName}.${index}_key${index}`] = elem;
+        if(elem.length > 4) {
+          existingData[`${fileName}.key${index}`] = elem;
+          // `${elem}`.split(' ').length == 1 ? existingData[elem] = elem:
+        }
       });
     }
 
@@ -54,13 +60,13 @@ async function extractTextContent(filePaths, fileType) {
     });
 
     consoleUtils.success(
-      "Files successfully processed. JSON file updated:",
+      "Файлы успешно обработаны. JSON файл обновлен:",
       jsonFilePath
     );
 
     return existingData;
   } catch (error) {
-    consoleUtils.error("Error reading/writing files:", error.message);
+    consoleUtils.error("Ошибка при чтении/записи файлов:", error.message);
     return null;
   }
 }
