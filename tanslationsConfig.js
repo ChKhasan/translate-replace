@@ -119,8 +119,8 @@ module.exports = function () {
         targetTags.forEach(tag => {
           $(tag).each(function () {
             const elementText = $(this).text().trim();
-            
-            if (elementText === searchText) {
+            const text = elementText.replace(/\s+/g, ' ').trim()
+            if (text === searchText) {
               $(this).text(replaceText);
               consoleUtils.success(`Replaced text in tag <${tag}> in file: ${filePath}`);
             }
@@ -128,7 +128,6 @@ module.exports = function () {
         });
         
         const updatedContent = $.html();
-        console.log('updatedContent',typeof updatedContent);
         const deletedHtmlTegs = updatedContent.replace('<html><head>','').replace('</head><body></body></html>','')
         fs.writeFileSync(filePath, deletedHtmlTegs, "utf-8");
       }

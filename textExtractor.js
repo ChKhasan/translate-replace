@@ -3,6 +3,9 @@ const path = require("path");
 const consoleUtils = require("./helpersTranslation/consoleUnits");
 const templates = require("./helpersTranslation/fileTemplates");
 const targetTags = require("./helpersTranslation/targetTags");
+const textMaxLength = require("./helpersTranslation/textMaxLength");
+const splitSymbol = require("./helpersTranslation/splitSymbol");
+const generateJSONKey = require("./helpersTranslation/generateJSONKey");
 const ignoreContents = require("./helpersTranslation/ignoreContents");
 const cheerio = require('cheerio')
 const replaceContent = require("./helpersTranslation/replace");
@@ -30,8 +33,16 @@ async function extractTextContent(filePaths, fileType) {
           $(singleLineHTML).find(tag).each(function() {
             const text = $(this).text().trim();
             const cleanText = ignoreContents.some((item) => text.includes(item));
+            const generateIndexs = Object.keys(existingData).map((elem) => {
+              if(elem.includes(generateJSONKey)) 
+                return elem.split(splitSymbol)[1] * 1
+            }).filter((item) => item * 1);
+
+            const maxIndex = generateIndexs.length ? Math.max(...generateIndexs):0
+            const currentIndex = maxIndex ? maxIndex + 1:1
+            
             if(text.length > 3 && !text.includes(replaceContent.content[0]) && !text.includes(replaceContent.content[1]) && !Object.values(existingData).includes(text) && !cleanText) {
-              text.split(' ').length == 1 ? existingData[text] = text:existingData[`key${index}${text.length}.key_${index}`] = text;
+              text.length <= textMaxLength ? existingData[text] = text:existingData[generateJSONKey+currentIndex] = text;
             }
           });
         });

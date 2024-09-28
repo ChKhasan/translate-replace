@@ -59,7 +59,7 @@ const selectIndices = () => {
 
         fileTypes[selectedFileTypeIndex],
       ];
-      const otherFileFunction = require("./tanslationsConfig-x.js");
+      const otherFileFunction = require("./tanslationsConfig.js");
       otherFileFunction();
       rl.close();
     });
