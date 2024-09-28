@@ -31,7 +31,7 @@ module.exports = {
     'header', 'section', 'article', 'nav'
   ],
   ignoreContents: ['{{','}}','$t('],
-  textMaxLength: 200,
+  textMaxLength: 100,
   generateJSONKey: 'generate_key-',
   splitSymbol: '-'
 };

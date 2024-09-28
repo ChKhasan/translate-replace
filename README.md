@@ -93,7 +93,10 @@ module.exports = {
     'audio', 'canvas', 'blockquote', 'cite', 'code', 'pre', 'footer',
     'header', 'section', 'article', 'nav'
   ],
-  ignoreContents: ['{{','}}','$t(']
+  ignoreContents: ['{{','}}','$t('],
+  textMaxLength: 100,
+  generateJSONKey: 'generate_key-',
+  splitSymbol: '-'
 };
 ```
 ## Templates
