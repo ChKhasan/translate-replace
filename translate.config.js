@@ -29,5 +29,6 @@ module.exports = {
     'form', 'input', 'textarea', 'select', 'button', 'img', 'video',
     'audio', 'canvas', 'blockquote', 'cite', 'code', 'pre', 'footer',
     'header', 'section', 'article', 'nav'
-  ]
+  ],
+  ignoreContents: ['{{','}}','$t(']
 };

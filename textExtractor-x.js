@@ -3,7 +3,6 @@ const path = require("path");
 const consoleUtils = require("./helpersTranslation/consoleUnits");
 const templates = require("./helpersTranslation/fileTemplates");
 const targetTags = require("./helpersTranslation/targetTags");
-const ignoreContents = require("./helpersTranslation/ignoreContents");
 const cheerio = require('cheerio')
 const replaceContent = require("./helpersTranslation/replace");
 async function extractTextContent(filePaths, fileType) {
@@ -29,8 +28,7 @@ async function extractTextContent(filePaths, fileType) {
         targetTags.forEach((tag,index) => {
           $(singleLineHTML).find(tag).each(function() {
             const text = $(this).text().trim();
-            const cleanText = ignoreContents.some((item) => text.includes(item));
-            if(text.length > 3 && !text.includes(replaceContent.content[0]) && !text.includes(replaceContent.content[1]) && !Object.values(existingData).includes(text) && !cleanText) {
+            if(text.length > 3 && !text.includes(replaceContent.content[0]) && !text.includes(replaceContent.content[1]) && !Object.values(existingData).includes(text)) {
               text.split(' ').length == 1 ? existingData[text] = text:existingData[`key${index}${text.length}.key_${index}`] = text;
             }
           });

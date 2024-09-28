@@ -7,9 +7,7 @@
 // 4.Для placeholders формы в конце нужно добавить ключевое слово _place, это условие для ключевых слов в админке
 
 // const axios = require("axios");
-
 module.exports = function () {
-  const targetTags = require("./helpersTranslation/targetTags");
   const fs = require("fs");
   const path = require("path");
   const selectedValues = require("./toTranslate");
@@ -19,7 +17,7 @@ module.exports = function () {
   const OUTSIDE_FILES = require("./helpersTranslation/outsideFiles");
   const replaceContent = require("./helpersTranslation/replace");
   const ignorFiles = require("./helpersTranslation/ignoreFiles");
-  const cheerio = require('cheerio')
+
   const fileType = selectedValues[1] || "html";
   const folderName =
     selectedValues[0] == OUTSIDE_FILES ? undefined : selectedValues[0];
@@ -28,25 +26,58 @@ module.exports = function () {
   async function searchAndReplaceInFolder(folderName) {
     const scriptDirectory = __dirname;
     const grandparentDirectory = path.dirname(path.dirname(scriptDirectory));
-  
+
     const targetDirectory = folderName
       ? path.join(grandparentDirectory, folderName)
       : grandparentDirectory;
-    
     const files = fs.readdirSync(targetDirectory);
-    if (files.length === 0) {
+    if (files.length == 0) {
       consoleUtils.error("This folder is empty");
     } else {
       const texts = await getTranslations();
-      const sortedTexts = Object.entries(texts).sort((a, b) => b[1].length - a[1].length);
-      
-      consoleUtils.info("Translations list:");
-      console.table(sortedTexts);
-  
-      sortedTexts.forEach((item) => {
-        let searchText = item[1];
-        let replaceText = replaceContent.content[0] + item[0] + replaceContent.content[1];
-        searchAndReplaceFiles(targetDirectory, searchText, replaceText);
+      const sortByTextLength = Object.entries(texts).sort(
+        (a, b) => b[1].length - a[1].length
+      );
+      consoleUtils.info("Translations list: ");
+      console.table(sortByTextLength);
+      const placeHolderTexts = await sortByTextLength.filter((elem) =>
+        elem[0].includes("_place")
+      );
+      consoleUtils.info("Placeholder text list: ");
+
+      console.table(placeHolderTexts);
+
+      const simpleTexts = await sortByTextLength.filter(
+        (elem) => !elem[0].includes("_place")
+      );
+      consoleUtils.info("Text list: ");
+
+      console.table(simpleTexts);
+
+      placeHolderTexts.forEach((item, index) => {
+        let searchText = `placeholder="${item[1]}"`;
+        let replaceText =
+          replaceContent.placeholder[0] +
+          item[0] +
+          replaceContent.placeholder[1];
+        searchAndReplaceFiles(
+          targetDirectory,
+          searchText,
+          replaceText,
+          index,
+          true
+        );
+      });
+      simpleTexts.forEach((item, index) => {
+        let replaceText =
+          replaceContent.content[0] + item[0] + replaceContent.content[1];
+        searchAndReplaceFiles(
+          targetDirectory,
+          item[1],
+          replaceText,
+          index,
+          false
+        );
       });
     }
   }
@@ -101,38 +132,40 @@ module.exports = function () {
       consoleUtils.error(`The folder named "${folderName}" was not found!`);
     }
   }
-  function searchAndReplaceFiles(directory, searchText, replaceText) {
-    const files = fs.readdirSync(directory);
-    
-    files.forEach((file) => {
-      const filePath = path.join(directory, file);
-      const stats = fs.statSync(filePath);
-  
-      if (stats.isDirectory() && folderName && !ignorFiles.includes(file)) {
-        searchAndReplaceFiles(filePath, searchText, replaceText);
-      } else if (stats.isFile() && file.endsWith(`.${fileType}`)) {
-        const content = fs.readFileSync(filePath, "utf-8");
-  
-        // Обрабатываем HTML с помощью Cheerio
-        const $ = cheerio.load(content);
-  
-        targetTags.forEach(tag => {
-          $(tag).each(function () {
-            const elementText = $(this).text().trim();
-            
-            if (elementText === searchText) {
-              $(this).text(replaceText);
-              consoleUtils.success(`Replaced text in tag <${tag}> in file: ${filePath}`);
-            }
-          });
-        });
-        
-        const updatedContent = $.html();
-        console.log('updatedContent',typeof updatedContent);
-        const deletedHtmlTegs = updatedContent.replace('<html><head>','').replace('</head><body></body></html>','')
-        fs.writeFileSync(filePath, deletedHtmlTegs, "utf-8");
+  function replaceTextInVueTemplate(content, searchText, replaceText) {
+    const regex = fileTemplate;
+    const matches = content.match(regex);
+
+    if (matches) {
+      const templateContent = matches[1];
+
+      const searchTextTrim = searchText.trim().toString();
+      try {
+        const escapedSearchText = searchTextTrim.replace(
+          /[.*+?^${}()|[\]\\]/g,
+          "\\$&"
+        );
+        if (!replaceText.includes(searchTextTrim)) {
+          const updatedTemplateContent = templateContent.replace(
+            new RegExp(escapedSearchText, "g"),
+            replaceText
+          );
+          const updatedContent = content.replace(
+            templateContent,
+            updatedTemplateContent
+          );
+          return updatedContent;
+        } else {
+          consoleUtils.error(
+            `[${searchTextTrim}]: The search text may contain a replacement keyword, please check your keywords`
+          );
+        }
+      } catch (e) {
+        console.log(e);
       }
-    });
+    }
+
+    return content;
   }
   consoleUtils.success("Starting process...");
   searchAndReplaceInFolder(folderName);
